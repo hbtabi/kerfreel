@@ -1,6 +1,6 @@
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { FFMPEG, parseProgressChunk, run } from './ffmpeg.js';
 import { buildRenderArgs } from './render.js';
 import { buildAss } from './shared/ass.js';
@@ -62,6 +62,7 @@ export async function renderClip(
   const map = new TimeMap(keep);
   const size = outputSize(preset, ctx.media, options.scale);
 
+  await mkdir(dirname(output), { recursive: true });
   const tmp = await mkdtemp(join(tmpdir(), 'kerfreel-render-'));
   try {
     let assPath: string | undefined;

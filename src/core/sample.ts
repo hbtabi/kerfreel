@@ -1,4 +1,5 @@
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
 import { FFMPEG, run } from './ffmpeg.js';
 import { toSrt, type Cue } from './shared/subtitles.js';
 
@@ -142,6 +143,7 @@ export interface SampleResult {
 /** Renders the sample video (and a matching SRT next to it). Falls back to no on-screen text if drawtext is unavailable. */
 export async function generateSample(out: string, opts: SampleOptions = {}): Promise<SampleResult> {
   let withText = opts.text !== false;
+  await mkdir(dirname(out), { recursive: true });
   try {
     await run(FFMPEG, buildSampleArgs(out, { ...opts, text: withText }));
   } catch (err) {
