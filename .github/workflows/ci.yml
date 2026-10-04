@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Lint · typecheck · test · build (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          ffmpeg -hide_banner -version | head -1
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+      - name: CLI smoke test
+        run: |
+          node dist/cli/index.js doctor
+          node dist/cli/index.js sample /tmp/kf/sample.mp4 --duration 21
+          node dist/cli/index.js clips /tmp/kf/sample.mp4 --srt /tmp/kf/sample.srt --min 3 --target 5 --max 8 -t 2 -f shorts,youtube --scale 0.25 -o /tmp/kf/out
+          node dist/cli/index.js cut /tmp/kf/sample.mp4 --srt /tmp/kf/sample.srt --scale 0.25 -o /tmp/kf/cut.mp4
+          ls -la /tmp/kf/out /tmp/kf/cut.mp4
