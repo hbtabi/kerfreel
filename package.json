@@ -1,0 +1,78 @@
+{
+  "name": "kerfreel",
+  "version": "0.1.0",
+  "description": "Local-first clip studio: cut the pauses, find the highlights, burn animated captions and export vertical + widescreen clips with ffmpeg.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Mohammed Hassan bin Tayyeb <hasaantayyb1@gmail.com>",
+  "homepage": "https://hbtabi.github.io/kerfreel/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hbtabi/kerfreel.git"
+  },
+  "bin": {
+    "kerfreel": "dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "scripts/whisper_local.py",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:server": "tsx watch src/cli/index.ts serve --port 5175",
+    "dev:web": "vite",
+    "build": "npm run build:node && npm run build:web",
+    "build:node": "tsc -p tsconfig.build.json && node scripts/postbuild.mjs",
+    "build:web": "vite build",
+    "build:demo": "npm run build:node && node scripts/demo-assets.mjs && cross-env VITE_DEMO=1 vite build --base=/kerfreel/",
+    "start": "node dist/cli/index.js serve",
+    "cli": "tsx src/cli/index.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p web/tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format": "prettier --write \"src/**/*.ts\" \"web/src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"web/src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\" \"scripts/**/*.mjs\""
+  },
+  "keywords": [
+    "ffmpeg",
+    "video",
+    "shorts",
+    "tiktok",
+    "reels",
+    "captions",
+    "silence-removal",
+    "highlights",
+    "whisper",
+    "clips"
+  ],
+  "dependencies": {
+    "commander": "^13.1.0",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.9",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "~5.9",
+    "typescript-eslint": "^8.71.0",
+    "vite": "^7.3.6",
+    "vitest": "^4.1.11"
+  }
+}

@@ -1,0 +1,4 @@
+dist
+node_modules
+web/public/demo
+package-lock.json

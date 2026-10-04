@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+.kerfreel/
+web/public/demo/
+scratch/
+*.kerfreel.json
+kerfreel-exports/
+kerfreel-sample.mp4
+kerfreel-sample.srt
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+*.tsbuildinfo
